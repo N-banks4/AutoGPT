@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import click
 
 from agbenchmark.reports.processing.report_types import Report
@@ -15,7 +17,7 @@ def print_markdown_report(report_json_file: str):
     report = Report.parse_file(report_json_file)
 
     # Header and metadata
-    click.echo(f"# Benchmark Report")
+    click.echo("# Benchmark Report")
     click.echo(f"- ⌛ **Run time:** `{report.metrics.run_time}`")
     click.echo(
         f"  - **Started at:** `{report.benchmark_start_time[:16].replace('T', '` `')}`"
@@ -100,7 +102,8 @@ def print_markdown_report(report_json_file: str):
                 f"in **{attempt.run_time}** "
                 f"and **{quantify('step', attempt.n_steps)}**\n"
             )
-            click.echo(f"   - **Cost:** `${round(attempt.cost, 3)}`")
+            if attempt.cost is not None:
+                click.echo(f"   - **Cost:** `${round(attempt.cost, 3)}`")
             if attempt.fail_reason:
                 click.echo(
                     "   - **Failure reason:**\n"
